@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<jnlp 
+  spec="1.0+" 
+  codebase="http://www.mager.org/Java/" 
+  href="Gpw.jnlp"> 
+  <information> 
+    <title>Gpw</title> 
+    <vendor>Jens-Uwe Mager</vendor> 
+    <homepage href="http://www.mager.org/Java/"/> 
+    <description>Generate Pronounceable Passwords</description> 
+    <description kind="short">Generate passwords that can be pronounced.</description> 
+    <offline-allowed/> 
+  </information> 
+  <resources> 
+    <j2se version="1.4+"/> 
+    <jar href="Gpw.jar"/> 
+  </resources> 
+  <application-desc/>
+</jnlp>

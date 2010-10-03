@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+
+<project name="Gpw" default="jar">
+
+<property name="DEBUG" value="off"/>  
+<property name="OPTIMIZE" value="on"/>  
+<property name="DEPRECATION" value="on"/>
+
+<property name="words.file" value="/usr/share/dict/words"/>
+
+<target name="init">
+    <tstamp/>
+    <available file="${words.file}" property="words.file.present"/>
+    <available file="tris.dat" property="tris.dat.present"/>
+</target>
+
+
+<target name="compile" depends="init">
+    <javac srcdir="${basedir}"
+            debug="${DEBUG}"
+            optimize="${OPTIMIZE}"
+            deprecation="${DEPRECATION}"
+    />
+</target>
+
+<target name="clean">
+    <delete>
+        <fileset dir="${basedir}" includes="**/*.class"/>
+    </delete>
+</target>
+
+<target name="clobber" depends="clean">
+    <delete file="Gpw.jar"/>
+    <delete file="Gpw.tar.gz"/>
+    <delete file="Gpw.zip"/>
+    <delete file="tris.dat"/>
+</target>
+
+<target name="jar" depends="compile,tris.dat">
+    <jar jarfile="Gpw.jar" basedir="${basedir}">
+        <include name="**/*.class"/>
+        <exclude name="**/*$$Tester.class"/>
+        <exclude name="**/LoadTris.class"/>
+        <include name="tris.dat"/>
+        <manifest>
+            <attribute name="Main-Class" value="GpwCmdLine"/>
+            <section name="Gpw.class">
+                <attribute name="Java-Bean" value="true"/>
+            </section>
+        </manifest>
+    </jar>
+</target>
+
+<target name="tris.dat" depends="init" unless="tris.dat.present">
+    <antcall target="loadtris"/>
+    <antcall target="copytris"/>
+</target>
+
+<target name="loadtris" depends="compile" if="words.file.present">
+    <java classname="LoadTris" fork="yes">
+        <arg value="${words.file}"/>
+    </java>
+</target>
+
+<target name="copytris" depends="init" unless="words.file.present">
+    <copy file="tris.dat.thvv" tofile="tris.dat"/>
+</target>
+
+<target name="tar">
+    <tar destfile="Gpw.tar.gz" compression="gzip">
+        <tarfileset prefix="Gpw" dir="${basedir}">
+            <include name="*.java"/>
+            <include name="build.xml"/>
+            <include name="tris.dat.thvv"/>
+        </tarfileset>
+    </tar>
+</target>
+
+<target name="zip">
+    <zip destfile="Gpw.zip">
+        <zipfileset prefix="Gpw" dir="${basedir}">
+            <include name="*.java"/>
+            <include name="build.xml"/>
+            <include name="tris.dat.thvv"/>
+        </zipfileset>
+    </zip>
+</target>
+
+</project>
